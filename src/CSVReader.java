@@ -10,15 +10,18 @@ import java.util.Scanner;
 
 import org.apache.commons.io.FilenameUtils;
 
+import static java.lang.System.out;
+
 public class CSVReader {
 	final static String CSV_FILE_PATH = "C:\\C2ImportFamRelSample.csv"; 
 
 	public static void main(String[] args) throws SQLException, IOException {
-		//ClassDB db = new ClassDB();
 		// Please ensure lower_case_table_names = 2 is set in my.ini
-    	//db.createDB("CSVReader");
+		ClassDB mysql = new ClassDB("mysql");
+		mysql.createDB("CSVReader");
         //readCSV();
-        System.out.println(readFirstColumn());
+    	ClassDB db = new ClassDB("CSVReader");
+    	db.createTables("CSVReader", readCSVFirstColumn() );
     }
 	
 	public static void readCSV() throws FileNotFoundException {
@@ -30,7 +33,7 @@ public class CSVReader {
         scanner.close();
 	}
 	
-	public static List<String> readFirstColumn() throws IOException {
+	public static List<String> readCSVFirstColumn() throws IOException {
 		List<String> columnName = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new FileReader( CSV_FILE_PATH )); 
 	    String line = br.readLine(); 
@@ -38,6 +41,7 @@ public class CSVReader {
 	    
 		Scanner scanner = new Scanner( line );
         scanner.useDelimiter(",");
+
         while(scanner.hasNext()){
             columnName.add( scanner.next() );
         }

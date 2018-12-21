@@ -1,30 +1,42 @@
+import static java.lang.System.out;
+
 import java.sql.*;
 import java.util.List;
 
 public class ClassDB {
 	// JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT";
+    static final String MYSQL_URL = "jdbc:mysql://localhost/";
+    static final String PARAMETER_URL = "?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT";
     //  Database credentials
     static final String USER = "syid";
     static final String PASS = "123456";
     static Connection conn = null;
-    
-//    public static void main(String[] args) throws SQLException {
-//    	ClassDB db = new ClassDB();
-//    	db.createDB("newdb");
-//    }
 
-	public ClassDB() throws SQLException {
-        try {
-			// Open a connection
-			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-        System.out.println("Successfully connected to database");
+	public ClassDB(String args) throws SQLException {
+		if(args.equals("mysql")) {
+	        try {
+				// Connecting to MYSQL url
+				System.out.println("Connecting to MySQL...");
+				conn = DriverManager.getConnection(MYSQL_URL + PARAMETER_URL, USER, PASS);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        System.out.println("Successfully connected to MySQL");
+		}else {
+			try {
+				// Connecting to database url
+				System.out.println("Connecting to database...");
+				String DB_NAME = args;
+				conn = DriverManager.getConnection(MYSQL_URL + DB_NAME + PARAMETER_URL, USER, PASS);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        	out.println("Database not found");
+	        }
+	        System.out.println("Successfully connected to database");
+		}
 	}
+		
 	
 	public void createDB(String DB_NAME) {
         Statement stmt = null;
@@ -66,11 +78,11 @@ public class ClassDB {
 	   Connection conn = null;
 	   try{
 	      // Register JDBC driver
-	      Class.forName("com.mysql.jdbc.Driver");
+	      Class.forName("com.mysql.cj.jdbc.Driver");
 
 	      // THIS REQUIRED: Open a connection
 	      System.out.println("Connecting to a selected database...");
-	      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+	      conn = DriverManager.getConnection(MYSQL_URL, USER, PASS);
 	      System.out.println("Connected database successfully...");
 	   }catch(SQLException se){
 	      //Handle errors for JDBC
@@ -94,7 +106,7 @@ public class ClassDB {
 	   Statement stmt = null;
 	   try{
 	      // Register JDBC driver
-	      Class.forName("com.mysql.jdbc.Driver");
+	      Class.forName("com.mysql.cj.jdbc.Driver");
 	      
 	      // Execute a query
 	      System.out.println("Deleting database...");
@@ -126,22 +138,24 @@ public class ClassDB {
 	   System.out.println("Goodbye!");
 	}//end main
 	
-	public static void createTables(String TABLE_NAME, List<String> COLUMN_NAME) {
+	public void createTables(String TABLE_NAME, List<String> COLUMN_NAME) {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		      
 		      //  Execute a query
 		      System.out.println("Creating table in given database...");
 		      stmt = conn.createStatement();
+		      StringBuilder chars = new StringBuilder();
 		      
-		      String sql = "CREATE TABLE " + TABLE_NAME +
-		                   "(id INTEGER not NULL, " +
-		                   " first VARCHAR(255), " + 
-		                   " last VARCHAR(255), " + 
-		                   " age INTEGER, " + 
-		                   " PRIMARY KEY ( id ))"; 
+		      for(String x : COLUMN_NAME ) {
+		    	  	chars.append(" `" + x + "` VARCHAR(255)");
+		    	  	//out.print(" " + x + " VARCHAR(255)");
+		    	  	if( !x.equals( COLUMN_NAME.get(COLUMN_NAME.size() - 1) )) chars.append(",");
+		      }
+
+		      String sql = "CREATE TABLE " + TABLE_NAME + "(" + chars + ")"; 
 
 		      stmt.executeUpdate(sql);
 		      System.out.println("Created table in given database...");
@@ -172,7 +186,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		
 		      // Execute a query
 		      System.out.println("Deleting table in given database...");
@@ -209,7 +223,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		      
 		      // Execute a query
 		      System.out.println("Inserting records into the table...");
@@ -256,7 +270,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		      
 		      // Execute a query
 		      System.out.println("Creating statement...");
@@ -306,7 +320,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 
 		      // Execute a query
 		      System.out.println("Creating statement...");
@@ -361,7 +375,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		      
 		      // Execute a query
 		      System.out.println("Creating statement...");
@@ -416,7 +430,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		      
 		      // Execute a query
 		      System.out.println("Creating statement...");
@@ -488,7 +502,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      //Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 
 		      // Open a connection
 		      System.out.println("Connecting to a selected database...");
@@ -565,7 +579,7 @@ public class ClassDB {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
-		      Class.forName("com.mysql.jdbc.Driver");
+		      Class.forName("com.mysql.cj.jdbc.Driver");
 		      
 		      // Execute a query
 		      System.out.println("Creating statement...");
