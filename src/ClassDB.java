@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.List;
 
 public class ClassDB {
 	// JDBC driver name and database URL
@@ -8,16 +9,26 @@ public class ClassDB {
     static final String USER = "syid";
     static final String PASS = "123456";
     static Connection conn = null;
+    
+//    public static void main(String[] args) throws SQLException {
+//    	ClassDB db = new ClassDB();
+//    	db.createDB("newdb");
+//    }
 
 	public ClassDB() throws SQLException {
-        // Open a connection
-        System.out.println("Connecting to database...");
-		conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try {
+			// Open a connection
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        System.out.println("Successfully connected to database");
 	}
 	
-	public static void createDB() {
+	public void createDB(String DB_NAME) {
         Statement stmt = null;
-        try {
+        try{
             // Register JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -25,12 +36,13 @@ public class ClassDB {
             System.out.println("Creating database...");
             stmt = conn.createStatement();
 
-            String sql = "CREATE DATABASE STUDENTS";
+            String sql = "CREATE DATABASE " + DB_NAME;
             stmt.executeUpdate(sql);
             System.out.println("Database created successfully...");
         } catch (SQLException se) {
             //Handle errors for JDBC
-            se.printStackTrace();
+            //se.printStackTrace();
+            System.out.println("Database name already exist");
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
@@ -78,7 +90,7 @@ public class ClassDB {
 	   System.out.println("Goodbye!");
 	}//end main
 	
-	public static void dropDB(String[] args) {
+	public static void dropDB(String DB_NAME) {
 	   Statement stmt = null;
 	   try{
 	      // Register JDBC driver
@@ -88,7 +100,7 @@ public class ClassDB {
 	      System.out.println("Deleting database...");
 	      stmt = conn.createStatement();
 	      
-	      String sql = "DROP DATABASE STUDENTS";
+	      String sql = "DROP DATABASE " + DB_NAME;
 	      stmt.executeUpdate(sql);
 	      System.out.println("Database deleted successfully...");
 	   }catch(SQLException se){
@@ -114,7 +126,7 @@ public class ClassDB {
 	   System.out.println("Goodbye!");
 	}//end main
 	
-	public static void createTables() {
+	public static void createTables(String TABLE_NAME, List<String> COLUMN_NAME) {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
@@ -124,7 +136,7 @@ public class ClassDB {
 		      System.out.println("Creating table in given database...");
 		      stmt = conn.createStatement();
 		      
-		      String sql = "CREATE TABLE REGISTRATION " +
+		      String sql = "CREATE TABLE " + TABLE_NAME +
 		                   "(id INTEGER not NULL, " +
 		                   " first VARCHAR(255), " + 
 		                   " last VARCHAR(255), " + 
