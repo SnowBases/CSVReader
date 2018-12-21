@@ -1,7 +1,10 @@
 import static java.lang.System.out;
 
-import java.sql.*;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ClassDB {
 	// JDBC driver name and database URL
@@ -138,7 +141,7 @@ public class ClassDB {
 	   System.out.println("Goodbye!");
 	}//end main
 	
-	public void createTables(String TABLE_NAME, List<String> COLUMN_NAME) {
+	public void createTables(String TABLE_NAME, String TABLE_PARAMETER) {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
@@ -147,15 +150,8 @@ public class ClassDB {
 		      //  Execute a query
 		      System.out.println("Creating table in given database...");
 		      stmt = conn.createStatement();
-		      StringBuilder chars = new StringBuilder();
-		      
-		      for(String x : COLUMN_NAME ) {
-		    	  	chars.append(" `" + x + "` VARCHAR(255)");
-		    	  	//out.print(" " + x + " VARCHAR(255)");
-		    	  	if( !x.equals( COLUMN_NAME.get(COLUMN_NAME.size() - 1) )) chars.append(",");
-		      }
 
-		      String sql = "CREATE TABLE " + TABLE_NAME + "(" + chars + ")"; 
+		      String sql = "CREATE TABLE " + TABLE_NAME + "(" + TABLE_PARAMETER + ")"; 
 
 		      stmt.executeUpdate(sql);
 		      System.out.println("Created table in given database...");
@@ -219,7 +215,7 @@ public class ClassDB {
 		   System.out.println("Goodbye!");
 		}//end main
 	
-	public static void insertRecords() {
+	public static void insertRecords(String DB_NAME) {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
@@ -229,7 +225,7 @@ public class ClassDB {
 		      System.out.println("Inserting records into the table...");
 		      stmt = conn.createStatement();
 		      
-		      String sql = "INSERT INTO Registration " +
+		      String sql = "INSERT INTO " + DB_NAME +
 		                   "VALUES (100, 'Zara', 'Ali', 18)";
 		      stmt.executeUpdate(sql);
 		      sql = "INSERT INTO Registration " +
@@ -506,7 +502,7 @@ public class ClassDB {
 
 		      // Open a connection
 		      System.out.println("Connecting to a selected database...");
-		      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+		      conn = DriverManager.getConnection(MYSQL_URL, USER, PASS);
 		      System.out.println("Connected database successfully...");
 		      
 		      // Execute a query

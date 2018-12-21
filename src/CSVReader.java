@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 import org.apache.commons.io.FilenameUtils;
 
-import static java.lang.System.out;
 
 public class CSVReader {
 	final static String CSV_FILE_PATH = "C:\\C2ImportFamRelSample.csv"; 
@@ -21,7 +20,7 @@ public class CSVReader {
 		mysql.createDB("CSVReader");
         //readCSV();
     	ClassDB db = new ClassDB("CSVReader");
-    	db.createTables("CSVReader", readCSVFirstColumn() );
+    	db.createTables("CSVReader", createTableSQL(readCSVFirstColumn()) );
     }
 	
 	public static void readCSV() throws FileNotFoundException {
@@ -46,7 +45,18 @@ public class CSVReader {
             columnName.add( scanner.next() );
         }
         scanner.close();
+        
         return columnName;
+	}
+	
+	public static String createTableSQL(List<String> column) {
+		StringBuilder str = new StringBuilder();
+			      
+		for(String x : column ) {
+			str.append(" `" + x + "` VARCHAR(255)");
+			if( !x.equals( column.get(column.size() - 1) )) str.append(",");
+		}
+		return str.toString();
 	}
 	
 	public static String getCSVFilename() {
