@@ -29,8 +29,8 @@ public class ClassDB {
 		}else {
 			try {
 				// Connecting to database url
-				System.out.println("Connecting to database...");
 				String DB_NAME = args;
+				System.out.println("Connecting to database '" + DB_NAME + "'...");
 				conn = DriverManager.getConnection(MYSQL_URL + DB_NAME + PARAMETER_URL, USER, PASS);
 	        } catch (Exception e) {
 	        	e.printStackTrace();
@@ -39,7 +39,6 @@ public class ClassDB {
 	        System.out.println("Successfully connected to database");
 		}
 	}
-		
 	
 	public void createDB(String DB_NAME) {
         Statement stmt = null;
@@ -74,7 +73,7 @@ public class ClassDB {
                 se.printStackTrace();
             } //end finally try
         } //end try
-        System.out.println("Goodbye!");
+        System.out.println("");
 	}
 	
 	public static void selectDB() {
@@ -102,10 +101,10 @@ public class ClassDB {
 	         se.printStackTrace();
 	      }//end finally try
 	   }//end try
-	   System.out.println("Goodbye!");
+	   System.out.println("");
 	}//end main
 	
-	public static void dropDB(String DB_NAME) {
+	public void dropDB(String DB_NAME) {
 	   Statement stmt = null;
 	   try{
 	      // Register JDBC driver
@@ -138,7 +137,7 @@ public class ClassDB {
 	         se.printStackTrace();
 	      }//end finally try
 	   }//end try
-	   System.out.println("Goodbye!");
+	   System.out.println("");
 	}//end main
 	
 	public void createTables(String TABLE_NAME, String TABLE_PARAMETER) {
@@ -157,25 +156,13 @@ public class ClassDB {
 		      System.out.println("Created table in given database...");
 		   }catch(SQLException se){
 		      //Handle errors for JDBC
-		      se.printStackTrace();
+		      //se.printStackTrace();
+		      System.out.println("Table name already exist");
 		   }catch(Exception e){
 		      //Handle errors for Class.forName
 		      e.printStackTrace();
-		   }finally{
-		      //finally block used to close resources
-		      try{
-		         if(stmt!=null)
-		            conn.close();
-		      }catch(SQLException se){
-		      }// do nothing
-		      try{
-		         if(conn!=null)
-		            conn.close();
-		      }catch(SQLException se){
-		         se.printStackTrace();
-		      }//end finally try
-		   }//end try
-		   System.out.println("Goodbye!");
+		   }
+		   System.out.println("");
 		}//end main
 	
 	public static void dropTables() {
@@ -212,10 +199,10 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 	
-	public static void insertRecords(String DB_NAME) {
+	public void insertRecords(String TABLE_NAME, String RECORD_PARAMETER) {
 		   Statement stmt = null;
 		   try{
 		      // Register JDBC driver
@@ -225,18 +212,10 @@ public class ClassDB {
 		      System.out.println("Inserting records into the table...");
 		      stmt = conn.createStatement();
 		      
-		      String sql = "INSERT INTO " + DB_NAME +
-		                   "VALUES (100, 'Zara', 'Ali', 18)";
+		      String sql = "INSERT INTO " + TABLE_NAME + " VALUES (" + RECORD_PARAMETER + ")";
+		      out.println(sql);
 		      stmt.executeUpdate(sql);
-		      sql = "INSERT INTO Registration " +
-		                   "VALUES (101, 'Mahnaz', 'Fatma', 25)";
-		      stmt.executeUpdate(sql);
-		      sql = "INSERT INTO Registration " +
-		                   "VALUES (102, 'Zaid', 'Khan', 30)";
-		      stmt.executeUpdate(sql);
-		      sql = "INSERT INTO Registration " +
-		                   "VALUES(103, 'Sumit', 'Mittal', 28)";
-		      stmt.executeUpdate(sql);
+		      
 		      System.out.println("Inserted records into the table...");
 
 		   }catch(SQLException se){
@@ -245,21 +224,8 @@ public class ClassDB {
 		   }catch(Exception e){
 		      //Handle errors for Class.forName
 		      e.printStackTrace();
-		   }finally{
-		      //finally block used to close resources
-		      try{
-		         if(stmt!=null)
-		            conn.close();
-		      }catch(SQLException se){
-		      }// do nothing
-		      try{
-		         if(conn!=null)
-		            conn.close();
-		      }catch(SQLException se){
-		         se.printStackTrace();
-		      }//end finally try
-		   }//end try
-		   System.out.println("Goodbye!");
+		   }
+		   System.out.println("");
 		}//end main
 	
 	public static void selectRecords() {
@@ -309,7 +275,7 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 	
 	public static void updateRecords() {
@@ -364,7 +330,7 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 	
 	public static void deleteRecord() {
@@ -419,7 +385,7 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 	
 	public static void whereClause() {
@@ -491,7 +457,7 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 	
 	public static void likeClause() {
@@ -568,7 +534,7 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 	
 	public static void sortingData() {
@@ -641,6 +607,6 @@ public class ClassDB {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
-		   System.out.println("Goodbye!");
+		   System.out.println("");
 		}//end main
 }
